@@ -9,25 +9,27 @@ import shutil
 
 def do_pack():
 
-    source_folder = "web_static"
-    name_file = (source_folder + "_" +
-                 datetime.now().strftime('%Y%m%d%H%M%S') + ".tgz")
-    path = "/versions"
+    try:
+        source_folder = "web_static"
+        name_file = (source_folder + "_" +
+                     datetime.now().strftime('%Y%m%d%H%M%S') + ".tgz")
+        path = "/versions"
 
-    print("Packing web_static to versions/" + name_file)
+        print("Packing web_static to versions/" + name_file)
 
-    local("tar -cvzf {} {} && chmod 664 {}"
-          .format(name_file, source_folder, name_file))
+        local("tar -cvzf {} {} && chmod 664 {}"
+              .format(name_file, source_folder, name_file))
 
-    with hide('running', 'stdout'):
-        local("mkdir -p versions")
+        with hide('running', 'stdout'):
+            local("mkdir -p versions")
 
-    size = str(os.path.getsize(name_file))
-    print("web_static packed: versions/" + name_file + " -> " + size + "Bytes")
+        size = str(os.path.getsize(name_file))
+        print("web_static packed: versions/" +
+              name_file + " -> " + size + "Bytes")
 
-    shutil.move("./{}".format(name_file), ".{}/{}".format(path, name_file))
+        shutil.move("./{}".format(name_file), ".{}/{}".format(path, name_file))
 
-    if os.path.isfile("{}/{}".format(path, name_file)):
         return "{}/{}".format(path, name_file)
 
-    return None
+    except BaseException:
+        return None
