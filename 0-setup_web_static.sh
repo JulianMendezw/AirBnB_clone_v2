@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# el comentario
 sudo apt-get update -y
 sudo apt install nginx -y
 sudo mkdir -p /data/web_static/shared/
