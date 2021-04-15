@@ -4,30 +4,29 @@
 from fabric.api import local, hide
 from datetime import datetime
 import os
-import shutil
 
 
 def do_pack():
 
     try:
         source_folder = "web_static"
-        name_file = (source_folder + "_" +
+        name_file = ("web_static" + "_" +
                      datetime.now().strftime('%Y%m%d%H%M%S') + ".tgz")
         path = "/versions"
 
         print("Packing web_static to versions/" + name_file)
 
-        local("tar -cvzf {} {} && chmod 664 {}"
-              .format(name_file, source_folder, name_file))
-
         with hide('running', 'stdout'):
             local("mkdir -p versions")
 
-        size = str(os.path.getsize(name_file))
+        local("tar -cvzf versions/{} {}"
+              .format(name_file, source_folder))
+
+        with hide('running', 'stdout'):
+            size = local("wc -c /etc/passwd | awk '{print $1}'", capture=True)
+
         print("web_static packed: versions/" +
               name_file + " -> " + size + "Bytes")
-
-        shutil.move("./{}".format(name_file), ".{}/{}".format(path, name_file))
 
         return "{}/{}".format(path, name_file)
 
