@@ -10,7 +10,7 @@ import shutil
 def do_pack():
 
     source_folder = "web_static"
-    name_file = (source_folder +
+    name_file = (source_folder + "_"
                  datetime.now().strftime('%Y%m%d%H%M%S') + ".tgz")
     path = "/versions"
 
