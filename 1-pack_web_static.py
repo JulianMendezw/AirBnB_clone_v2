@@ -7,6 +7,7 @@ import os
 
 
 def do_pack():
+    """ Function to convert a .tgz archive """
 
     try:
         source_folder = "web_static"
