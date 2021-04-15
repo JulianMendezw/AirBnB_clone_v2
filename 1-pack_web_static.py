@@ -16,7 +16,8 @@ def do_pack():
 
     print("Packing web_static to versions/" + name_file)
 
-    local("tar -cvzf {} {}".format(name_file, source_folder))
+    local("tar -cvzf {} {} && chmod 664 {}"
+          .format(name_file, source_folder, name_file))
 
     try:
         os.mkdir("versions")
