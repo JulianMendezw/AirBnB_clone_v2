@@ -72,9 +72,7 @@ def deploy():
 
     archive_path = do_pack()
 
-    if file_path is None:
+    if not file_path:
         return(False)
 
-    create_path = do_deploy(archive_path)
-
-    return(create_path)
+    return do_deploy(archive_path)
