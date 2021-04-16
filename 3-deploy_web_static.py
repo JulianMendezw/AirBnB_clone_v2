@@ -1,38 +1,25 @@
 #!/usr/bin/python3
 """ Fabric script (based on the file 1-pack_web_static.py) that distributes
     an archive to your web servers, using the function do_deploy. """
-from fabric.api import local, hide, env, run, put
 from datetime import datetime
+from fabric.api import *
+from os.path import isdir
 import os
-env.user = "ubuntu"
+
+
 env.hosts = ["35.190.147.175", "54.204.101.31"]
 
 
+@runs_once
 def do_pack():
-    """ Function to convert a .tgz archive """
-
+    """generates a tgz archive"""
     try:
-        source_folder = "web_static"
-        name_file = ("web_static" + "_" +
-                     datetime.now().strftime('%Y%m%d%H%M%S') + ".tgz")
-        path = "/versions"
-
-        print("Packing web_static to versions/" + name_file)
-
-        with hide('running', 'stdout'):
-            local("mkdir -p versions")
-
-        local("tar -cvzf versions/{} {}"
-              .format(name_file, source_folder))
-
-        with hide('running', 'stdout'):
-            size = local("wc -c /etc/passwd | awk '{print $1}'", capture=True)
-
-        print("web_static packed: versions/" +
-              name_file + " -> " + size + "Bytes")
-
-        return "{}/{}".format(path, name_file)
-
+        date = datetime.now().strftime("%Y%m%d%H%M%S")
+        if isdir("versions") is False:
+            local("mkdir versions")
+        file_name = "versions/web_static_{}.tgz".format(date)
+        local("tar -cvzf {} web_static".format(file_name))
+        return file_name
     except BaseException:
         return None
 
@@ -66,13 +53,12 @@ def do_deploy(archive_path):
 
 
 def deploy():
-    """ Fabric script (based on the file 2-do_deploy_web_static.py) that
-        creates and distributes an archive to your web servers,
-        using the function deploy: """
-
+    """
+    Creates and distributes an archive to web servers
+    """
     archive_path = do_pack()
 
     if not archive_path:
-        return(False)
+        return False
 
     return do_deploy(archive_path)
