@@ -25,5 +25,5 @@ def HBNB():
 
 # Create the main driver function
 if __name__ == '__main__':
-    # call the run method
+    """ call the run method """
     app.run(host="0.0.0.0", port="5000")
