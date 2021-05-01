@@ -17,35 +17,30 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
-        if not kwargs:
-            from models import storage
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
-        else:
-            if('updated_at' in kwargs.keys()):
-                kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                         '%Y-%m-%dT%H:%M:%S.%f')
-            if('created_at' in kwargs.keys()):
-                kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                                         '%Y-%m-%dT%H:%M:%S.%f')
-            if('__class__' in kwargs.keys()):
-                del kwargs['__class__']
-            else:
-                from models import storage
-                self.id = str(uuid.uuid4())
-                self.created_at = datetime.now()
-                self.updated_at = datetime.now()
-                # storage.new(self)   OJOOOOOO CON ESTA LINEA
-            self.__dict__.update(kwargs)
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+        if kwargs:
+            for key, value in kwargs.items():
+                if key == 'updated_at':
+                    kwargs['updated_at'] = (datetime.
+                                            strptime(kwargs['updated_at'],
+                                                     '%Y-%m-%dT%H:%M:%S.%f'))
+                if key == 'created_at':
+                    kwargs['created_at'] = (datetime.
+                                            strptime(kwargs['created_at'],
+                                                     '%Y-%m-%dT%H:%M:%S.%f'))
+        kwargs.pop('__class__', None)
+        self.__dict__.update(kwargs)
 
     def __str__(self):
         """Returns a string representation of the instance"""
         cls = (str(type(self)).split('.')[-1]).split('\'')[0]
-        dct1 = self.__dict__
-        if('_sa_instance_state' in dct1.keys()):
-            del dct1['_sa_instance_state']
-        return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
+        dictionary = {}
+        for key, val in self.__dict__.items():
+            dictionary[key] = val
+        dictionary.pop("_sa_instance_state", None)
+        return '[{}] ({}) {}'.format(cls, self.id, dictionary)
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""
@@ -59,7 +54,7 @@ class BaseModel:
         dictionary = {}
         dictionary.update(self.__dict__)
         dictionary.update({'__class__':
-                          (str(type(self)).split('.')[-1]).split('\'')[0]})
+                           (str(type(self)).split('.')[-1]).split('\'')[0]})
         dictionary['created_at'] = self.created_at.isoformat()
         dictionary['updated_at'] = self.updated_at.isoformat()
 
