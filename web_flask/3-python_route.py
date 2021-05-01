@@ -30,7 +30,7 @@ def show_user_text(text):
     return "C " + text
 
 
-@app.route('/python/', defaults={'text': 'is fun'}, strict_slashes=False)
+@app.route('/python/', defaults={'text': 'is cool'}, strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
 def show_user_text_2(text):
     """ Take a argument and return it """
