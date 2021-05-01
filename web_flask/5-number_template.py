@@ -45,8 +45,8 @@ def show_user_number(n):
 
 
 @app.route('/number_template/<int:n>', strict_slashes=False)
-def render_template_2(n):
-    """ render a html if n is number """
+def number_template(n):
+    """ display a HTML page only if n is an integer """
     return render_template('5-number.html', value=n)
 
 
