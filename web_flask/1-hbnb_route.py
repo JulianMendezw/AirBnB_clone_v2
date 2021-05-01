@@ -20,7 +20,7 @@ def web_flask():
 @app.route('/hbnb', strict_slashes=False)
 def HBNB():
     """ Return HBNB text """
-    return "HBNB!"
+    return "HBNB"
 
 
 # Create the main driver function
