@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ Starts a Flash Web Application """
-from flask import Flask
+from flask import Flask, render_template
 
 # Create a Flask constructor.
 # It takes name of the current module as the argument
