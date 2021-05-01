@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+""" Starts a Flash Web Application """
 from flask import Flask
 
 # Create a Flask constructor.
@@ -19,7 +20,7 @@ def web_flask():
 @app.route('/hbnb', strict_slashes=False)
 def HBNB():
     """ Return HBNB text """
-    return "HBNB!"
+    return "HBNB"
 
 
 @app.route('/c/<text>', strict_slashes=False)
