@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship
 from models.engine.file_storage import FileStorage
 from models.city import City
 from os import getenv
+import models
 
 
 class State(BaseModel, Base):
@@ -22,7 +23,7 @@ class State(BaseModel, Base):
 
         @property
         def cities(self):
-            cities_instances = FileStorage.all(City)
+            cities_instances = models.storage.all(City)
             cities_list = []
             for key, value in cities_instances.items():
                 if self.id == value.state_id:
