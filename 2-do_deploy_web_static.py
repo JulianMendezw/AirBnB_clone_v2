@@ -5,7 +5,7 @@ from fabric.api import local, hide, env, run, put
 from datetime import datetime
 import os
 env.user = "ubuntu"
-env.hosts = ["35.190.147.175", "54.204.101.31"]
+env.hosts = ["35.190.147.175"]
 
 
 def do_pack():
@@ -38,28 +38,26 @@ def do_pack():
 
 
 def do_deploy(archive_path):
-    """ Deploy the archive and configure the web server """
+    """ Distributes an archive to  your web serves """
 
-    if not os.path.exists(archive_path):
-        return(False)
     try:
-        put(archive_path, "/tmp/")
-        folder_path = "/data/web_static/releases/" + archive_path[9:-4]
-        name_file = archive_path[9:]
-        name_folder = archive_path[9:-4]
-        date = archive_path[21:-4]
-        releases = "/data/web_static/releases/"
-
-        run("mkdir -p {}".format(folder_path))
-        run("tar -xzf /tmp/{} -C {}".format(name_file, folder_path))
-        run("rm /tmp/{}".format(name_file))
-        run("mv {}{}/web_static/* {}{}/"
-            .format(releases, name_folder, releases, name_folder))
-        run("rm -rf {}{}/web_static".format(releases, name_folder))
-        run("rm -rf /data/web_static/current")
-        run("ln -s {} /data/web_static/current".format(folder_path))
-        print("New version deployed!")
-
-        return(True)
-    except BaseException:
-        return (False)
+        # Upload
+        put(archive_path, '/tmp/')
+        # Uncompress
+        dir_name = archive_path[9:-4]
+        run('mkdir -p /data/web_static/releases/{}/'.format(dir_name))
+        run('tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/'.
+            format(dir_name, dir_name))
+        #Delete the archive
+        run('rm /tmp/{}.tgz'.format(dir_name))
+        run('mv /data/web_static/releases/{}/web_static/* /data/web_static/releases/{}/'.
+            format(dir_name, dir_name))
+        run('rm -rf /data/web_static/releases/{}/web_static'.
+            format(dir_name))
+        #Delete the symbolic link
+        run('rm -rf /data/web_static/current')
+        # Create a new the symbolic link
+        run('ln -s /data/web_static/releases/{}/ /data/web_static/current'.
+            format(dir_name))
+    except:
+        return False
