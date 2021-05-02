@@ -22,7 +22,6 @@ def states_list():
     states = {}
     for key, value in states_dict.items():
         states[value.id] = value.name
-    sorted(states)
 
     return render_template('7-states_list.html', states=states)
 
