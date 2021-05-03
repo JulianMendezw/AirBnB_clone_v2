@@ -23,7 +23,7 @@ def list_cities():
     """
     states = {}
     state_dictionary = storage.all(State)
-    for key, value in sorted(state_dictionary.items()):
+    for key, value in state_dictionary.items():
         states[value.id] = value
     return render_template('8-cities_by_states.html', states=states)
 
