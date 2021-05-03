@@ -16,10 +16,14 @@ def teardown_appcontext_handle(error):
 
 
 @app.route('/states_list', strict_slashes=False)
-def states_list():
-    """ displays a HTML page with a list of states """
-    states = storage.all(State).values()
-    states = sorted(states, key=lambda k: k.name)
+def list_states():
+    """
+    Method to render a template
+    """
+    state_dictionary = storage.all(State)
+    states = {}
+    for key, value in state_dictionary.items():
+        states[value.id] = value.name
     return render_template('7-states_list.html', states=states)
 
 
