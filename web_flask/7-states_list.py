@@ -21,10 +21,7 @@ def list_states():
     Method to render a template
     """
     state_dictionary = storage.all(State)
-    states = {}
-    for key, value in state_dictionary.items():
-        states[value.id] = value.name
-    return render_template('7-states_list.html', states=states)
+    return render_template('7-states_list.html', states=state_dictionary)
 
 
 # Create the main driver function
